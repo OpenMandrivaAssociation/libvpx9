@@ -3,7 +3,7 @@
 %define develname %mklibname -d vpx
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
-Version:		0.9.0
+Version:		0.9.1
 Release:		%mkrel 1
 License:		BSD
 Group:			System/Libraries
@@ -105,6 +105,10 @@ mv libNOTvpx_g.a libvpx_g.a
 rm -rf %buildroot
 make DIST_DIR=%{buildroot}%{_prefix} install
 
+cp simple_decoder %buildroot%_bindir/vp8_simple_decoder                        
+cp simple_encoder %buildroot%_bindir/vp8_simple_encoder                        
+cp twopass_encoder %buildroot%_bindir/vp8_twopass_encoder            
+
 # Install the pkg-config file
 mkdir -p %{buildroot}%{_libdir}/pkgconfig/
 install -m0644 %{SOURCE1} %{buildroot}%{_libdir}/pkgconfig/
@@ -113,8 +117,6 @@ sed -i "s|@PREFIX@|%{_prefix}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
 sed -i "s|@LIBDIR@|%{_libdir}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
 sed -i "s|@INCLUDEDIR@|%{_includedir}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
 
-# Simpler to label the dir as %doc.
-mv %{buildroot}/usr/docs doc/
 
 mkdir -p %{buildroot}%{_includedir}/vpx/
 install -p libvpx.so.0.0.0 %{buildroot}%{_libdir}
@@ -126,12 +128,6 @@ popd
 pushd %{buildroot}
 # Stuff we don't need.
 rm -rf usr/build/ usr/md5sums.txt usr/lib*/*.a usr/CHANGELOG usr/README
-# Rename a few examples
-mv usr/bin/simple_decoder usr/bin/vp8_simple_decoder
-mv usr/bin/simple_encoder usr/bin/vp8_simple_encoder
-mv usr/bin/twopass_encoder usr/bin/vp8_twopass_encoder
-# Move the headers into the subdir
-mv usr/include/*.h usr/include/vpx/
 # Fix the binary permissions
 chmod 755 usr/bin/*
 popd
@@ -147,7 +143,7 @@ rm -rf %{buildroot}
 %files -n %develname
 %defattr(-,root,root,-)
 # These are SDK docs, not really useful to an end-user.
-%doc doc/
+%doc docs/html
 %{_includedir}/vpx/
 %{_libdir}/pkgconfig/libvpx.pc
 %{_libdir}/libvpx.so
