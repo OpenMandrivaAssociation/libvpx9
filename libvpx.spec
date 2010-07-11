@@ -1,10 +1,11 @@
 %define major 0
 %define libname %mklibname vpx %major
 %define develname %mklibname -d vpx
+%define snapshot 0
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
 Version:		0.9.1
-Release:		%mkrel 1
+Release:		%mkrel 2
 License:		BSD
 Group:			System/Libraries
 Source0:		http://webm.googlecode.com/files/%{name}-%{version}.tar.bz2
@@ -48,7 +49,7 @@ libvpx.
 %package utils
 Summary:		VP8 utilities and tools
 Group:			Video
-Requires:		%{name} = %{version}-%{release}
+Requires:		%{libname} = %{version}-%{release}
 
 %description utils
 A selection of utilities and tools for VP8, including a sample encoder
@@ -116,7 +117,6 @@ install -m0644 %{SOURCE1} %{buildroot}%{_libdir}/pkgconfig/
 sed -i "s|@PREFIX@|%{_prefix}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
 sed -i "s|@LIBDIR@|%{_libdir}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
 sed -i "s|@INCLUDEDIR@|%{_includedir}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
-
 
 mkdir -p %{buildroot}%{_includedir}/vpx/
 install -p libvpx.so.0.0.0 %{buildroot}%{_libdir}
