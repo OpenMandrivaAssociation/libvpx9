@@ -4,11 +4,11 @@
 %define snapshot 0
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
-Version:		0.9.1
-Release:		%mkrel 2
+Version:		0.9.2
+Release:		%mkrel 1
 License:		BSD
 Group:			System/Libraries
-Source0:		http://webm.googlecode.com/files/%{name}-%{version}.tar.bz2
+Source0:		http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
 Source1:		libvpx.pc
 # Thanks to debian.
 Source2:		libvpx.ver
