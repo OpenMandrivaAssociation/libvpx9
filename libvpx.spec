@@ -4,7 +4,7 @@
 %define snapshot 0
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
-Version:		0.9.2
+Version:		0.9.5
 Release:		%mkrel 1
 License:		BSD
 Group:			System/Libraries
@@ -56,7 +56,7 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
-%setup -q
+%setup -q -n %name-v%version
 %patch0 -p1 -b .no-static-lib
 
 %build
