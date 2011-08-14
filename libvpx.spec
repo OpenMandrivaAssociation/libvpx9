@@ -4,15 +4,14 @@
 %define snapshot 0
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
-Version:		0.9.6
-Release:		%mkrel 2
+Version:		0.9.7
+Release:		%mkrel 1
 License:		BSD
 Group:			System/Libraries
 Source0:		http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
-Source1:		libvpx.pc
 # Thanks to debian.
 Source2:		libvpx.ver
-Patch0:			libvpx-0.9.0-no-explicit-dep-on-static-lib.patch
+Patch0:			libvpx-0.9.7-no-explicit-dep-on-static-lib.patch
 URL:			http://www.webmproject.org/tools/vp8-sdk/
 BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 %ifarch %{ix86} x86_64
@@ -110,13 +109,14 @@ cp simple_decoder %buildroot%_bindir/vp8_simple_decoder
 cp simple_encoder %buildroot%_bindir/vp8_simple_encoder                        
 cp twopass_encoder %buildroot%_bindir/vp8_twopass_encoder            
 
-# Install the pkg-config file
-mkdir -p %{buildroot}%{_libdir}/pkgconfig/
-install -m0644 %{SOURCE1} %{buildroot}%{_libdir}/pkgconfig/
+%if %_lib != lib
+mkdir -p %buildroot%_libdir
+mv %buildroot%_prefix/lib/pkgconfig %buildroot%_libdir
+%endif
+
 # Fill in the variables
-sed -i "s|@PREFIX@|%{_prefix}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
-sed -i "s|@LIBDIR@|%{_libdir}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
-sed -i "s|@INCLUDEDIR@|%{_includedir}|g" %{buildroot}%{_libdir}/pkgconfig/libvpx.pc
+sed -i "s|/usr/local|%{_prefix}|g" %{buildroot}%{_libdir}/pkgconfig/vpx.pc
+sed -i "s|\${prefix}/lib|%{_libdir}|g" %{buildroot}%{_libdir}/pkgconfig/vpx.pc
 
 mkdir -p %{buildroot}%{_includedir}/vpx/
 install -p libvpx.so.0.0.0 %{buildroot}%{_libdir}
@@ -145,7 +145,7 @@ rm -rf %{buildroot}
 # These are SDK docs, not really useful to an end-user.
 %doc docs/html
 %{_includedir}/vpx/
-%{_libdir}/pkgconfig/libvpx.pc
+%{_libdir}/pkgconfig/vpx.pc
 %{_libdir}/libvpx.so
 
 %files utils
