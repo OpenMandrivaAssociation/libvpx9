@@ -5,10 +5,10 @@
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
 Version:		0.9.7
-Release:		%mkrel 1
+Release:		%mkrel 2
 License:		BSD
 Group:			System/Libraries
-Source0:		http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
+Source0:		http://webm.googlecode.com/files/%{name}-v%{version}-p1.tar.bz2
 # Thanks to debian.
 Source2:		libvpx.ver
 Patch0:			libvpx-0.9.7-no-explicit-dep-on-static-lib.patch
@@ -55,7 +55,7 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
-%setup -q -n %name-v%version
+%setup -q -n %name-v%version-p1
 %patch0 -p1 -b .no-static-lib
 
 %build
