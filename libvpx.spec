@@ -68,6 +68,7 @@ and decoder.
 %global vpxtarget generic-gnu
 %endif
 %endif
+%setup_compile_flags
 
 ./configure --target=%{vpxtarget} --enable-pic --disable-install-srcs
 
