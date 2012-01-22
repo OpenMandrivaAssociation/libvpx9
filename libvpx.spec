@@ -5,7 +5,7 @@
 Name:			libvpx
 Summary:		VP8 Video Codec SDK
 Version:		0.9.7
-Release:		%mkrel 2
+Release:		3
 License:		BSD
 Group:			System/Libraries
 Source0:		http://webm.googlecode.com/files/%{name}-v%{version}-p1.tar.bz2
@@ -13,7 +13,6 @@ Source0:		http://webm.googlecode.com/files/%{name}-v%{version}-p1.tar.bz2
 Source2:		libvpx.ver
 Patch0:			libvpx-0.9.7-no-explicit-dep-on-static-lib.patch
 URL:			http://www.webmproject.org/tools/vp8-sdk/
-BuildRoot: %{_tmppath}/%{name}-%{version}-buildroot
 %ifarch %{ix86} x86_64
 BuildRequires:		yasm
 %endif
@@ -103,7 +102,6 @@ mv libNOTvpx.a libvpx.a
 mv libNOTvpx_g.a libvpx_g.a
 
 %install
-rm -rf %buildroot
 make DIST_DIR=%{buildroot}%{_prefix} install
 
 cp simple_decoder %buildroot%_bindir/vp8_simple_decoder                        
@@ -133,16 +131,11 @@ rm -rf usr/build/ usr/md5sums.txt usr/lib*/*.a usr/CHANGELOG usr/README
 chmod 755 usr/bin/*
 popd
 
-%clean
-rm -rf %{buildroot}
-
 %files -n %libname
-%defattr(-,root,root,-)
 %doc AUTHORS CHANGELOG LICENSE README
 %{_libdir}/libvpx.so.%{major}*
 
 %files -n %develname
-%defattr(-,root,root,-)
 # These are SDK docs, not really useful to an end-user.
 %doc docs/html
 %{_includedir}/vpx/
@@ -150,6 +143,4 @@ rm -rf %{buildroot}
 %{_libdir}/libvpx.so
 
 %files utils
-%defattr(-,root,root,-)
 %{_bindir}/*
-
