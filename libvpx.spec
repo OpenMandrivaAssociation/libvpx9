@@ -71,12 +71,7 @@ and decoder.
 
 # Really? You couldn't make this a shared library? Ugh.
 # Oh well, I'll do it for you.
-mkdir -p tmp
-cd tmp
-ar x ../libvpx_g.a
-cd ..
-gcc -fPIC -shared -pthread -lm %{ldflags} -Wl,-soname,libvpx.so.0 -Wl,--version-script,%{SOURCE2} -Wl,-z,noexecstack -o libvpx.so.0.0.0 tmp/*.o 
-rm -rf tmp
+gcc -fPIC -shared -pthread -lm %{ldflags} -Wl,-soname,libvpx.so.0 -Wl,--version-script,%{SOURCE2} -Wl,-z,noexecstack -Wl,--whole-archive libvpx_g.a -Wl,--no-whole-archive -o libvpx.so.0.0.0
 
 # Temporarily dance the static libs out of the way
 mv libvpx.a libNOTvpx.a
