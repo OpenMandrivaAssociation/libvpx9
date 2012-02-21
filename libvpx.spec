@@ -90,9 +90,9 @@ mv libNOTvpx_g.a libvpx_g.a
 %install
 make DIST_DIR=%{buildroot}%{_prefix} install
 
-cp simple_decoder %{buildroot}%{_bindir}/vp8_simple_decoder                        
-cp simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder                        
-cp twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder            
+cp simple_decoder %{buildroot}%{_bindir}/vp8_simple_decoder
+cp simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder
+cp twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder
 
 %if %{_lib} != lib
 mkdir -p %{buildroot}%{_libdir}
