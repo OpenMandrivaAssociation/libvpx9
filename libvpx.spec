@@ -85,6 +85,7 @@ and decoder.
 
 # stupid config
 perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
+perl -pi -e "s|^LIBSUBDIR=lib|LIBSUBDIR=%{_lib}|g" config.mk
 
 %make verbose=true target=libs
 %make verbose=true target=examples
@@ -97,11 +98,6 @@ make DIST_DIR=%{buildroot}%{_prefix} install
 install -m0755 simple_decoder %{buildroot}%{_bindir}/vp8_simple_decoder
 install -m0755 simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder
 install -m0755 twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder
-
-%if %{_lib} != lib
-mkdir -p %{buildroot}%{_libdir}
-mv %{buildroot}%{_prefix}/lib/pkgconfig %{buildroot}%{_libdir}
-%endif
 
 %files -n %{libname}
 %doc AUTHORS CHANGELOG LICENSE README
