@@ -1,14 +1,26 @@
+%if %mandriva_branch == Cooker
+# Cooker
+%define release 1
+%else
+# Old distros
+%define subrel 1
+%define release %mkrel 0
+%endif
+
+%define	major 1
+%define	libname	%mklibname vpx %{major}
+%define	devname	%mklibname -d vpx
+
 Name:		libvpx
 Summary:	VP8 Video Codec SDK
-Version:	0.9.7
-Release:	%mkrel 3
+Version:	1.0.0
+Release:	%{release}
 License:	BSD
 Group:		System/Libraries
-Source0:	http://webm.googlecode.com/files/%{name}-v%{version}-p1.tar.bz2
-# Thanks to debian.
-Source2:	libvpx.ver
-Patch0:		libvpx-0.9.7-no-explicit-dep-on-static-lib.patch
 URL:		http://www.webmproject.org/tools/vp8-sdk/
+Source0:	http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
+Patch0:		libvpx-0.9.7-no-explicit-dep-on-static-lib.patch
+Patch1:		libvpx-v1.0.0-cleaner_pkgconfig.diff
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
 %endif
@@ -19,8 +31,6 @@ libvpx provides the VP8 SDK, which allows you to integrate your applications
 with the VP8 video codec, a high quality, royalty free, open source codec 
 deployed on millions of computers and devices worldwide. 
 
-%define	major	0
-%define	libname	%mklibname vpx %major
 %package -n	%{libname}
 Summary:	VP8 Video Codec SDK
 Group:		System/Libraries
@@ -30,7 +40,6 @@ libvpx provides the VP8 SDK, which allows you to integrate your applications
 with the VP8 video codec, a high quality, royalty free, open source codec 
 deployed on millions of computers and devices worldwide. 
 
-%define	devname	%mklibname -d vpx
 %package -n	%{devname}
 Summary:	Development files for libvpx
 Group:		Development/C
@@ -50,8 +59,10 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
-%setup -q -n %{name}-v%{version}-p1
+
+%setup -q -n %{name}-v%{version}
 %patch0 -p1 -b .no-static-lib
+%patch1 -p0
 
 %build
 %ifarch %{ix86}
@@ -65,57 +76,32 @@ and decoder.
 %endif
 %setup_compile_flags
 
-./configure --target=%{vpxtarget} --enable-pic --disable-install-srcs
+./configure \
+    --enable-shared \
+    --disable-static \
+    --target=%{vpxtarget} \
+    --enable-pic \
+    --disable-install-srcs
+
+# stupid config
+perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
 
 %make verbose=true target=libs
-
-# Really? You couldn't make this a shared library? Ugh.
-# Oh well, I'll do it for you.
-gcc -fPIC -shared -pthread -lm %{ldflags} -Wl,-soname,libvpx.so.0 -Wl,--version-script,%{SOURCE2} -Wl,-z,noexecstack -Wl,--whole-archive libvpx_g.a -Wl,--no-whole-archive -o libvpx.so.0.0.0
-
-# Temporarily dance the static libs out of the way
-mv libvpx.a libNOTvpx.a
-mv libvpx_g.a libNOTvpx_g.a
-
-# We need to do this so the examples can link against it.
-ln -sf libvpx.so.0.0.0 libvpx.so
-
 %make verbose=true target=examples
 %make verbose=true target=docs
 
-# Put them back so the install doesn't fail
-mv libNOTvpx.a libvpx.a
-mv libNOTvpx_g.a libvpx_g.a
-
 %install
+
 make DIST_DIR=%{buildroot}%{_prefix} install
 
-cp simple_decoder %{buildroot}%{_bindir}/vp8_simple_decoder
-cp simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder
-cp twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder
+install -m0755 simple_decoder %{buildroot}%{_bindir}/vp8_simple_decoder
+install -m0755 simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder
+install -m0755 twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder
 
 %if %{_lib} != lib
 mkdir -p %{buildroot}%{_libdir}
 mv %{buildroot}%{_prefix}/lib/pkgconfig %{buildroot}%{_libdir}
 %endif
-
-# Fill in the variables
-sed -i "s|/usr/local|%{_prefix}|g" %{buildroot}%{_libdir}/pkgconfig/vpx.pc
-sed -i "s|\${prefix}/lib|%{_libdir}|g" %{buildroot}%{_libdir}/pkgconfig/vpx.pc
-
-mkdir -p %{buildroot}%{_includedir}/vpx/
-install -p libvpx.so.0.0.0 %{buildroot}%{_libdir}
-pushd %{buildroot}%{_libdir}
-ln -sf libvpx.so.0.0.0 libvpx.so
-ln -sf libvpx.so.0.0.0 libvpx.so.0
-ln -sf libvpx.so.0.0.0 libvpx.so.0.0
-popd
-pushd %{buildroot}
-# Stuff we don't need.
-rm -rf usr/build/ usr/md5sums.txt usr/lib*/*.a usr/CHANGELOG usr/README
-# Fix the binary permissions
-chmod 755 usr/bin/*
-popd
 
 %files -n %{libname}
 %doc AUTHORS CHANGELOG LICENSE README
