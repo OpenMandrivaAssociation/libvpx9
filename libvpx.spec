@@ -19,8 +19,6 @@ License:	BSD
 Group:		System/Libraries
 URL:		http://www.webmproject.org/tools/vp8-sdk/
 Source0:	http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
-Patch0:		libvpx-0.9.7-no-explicit-dep-on-static-lib.patch
-Patch1:		libvpx-v1.0.0-cleaner_pkgconfig.diff
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
 %endif
@@ -61,8 +59,6 @@ and decoder.
 %prep
 
 %setup -q -n %{name}-v%{version}
-%patch0 -p1 -b .no-static-lib
-%patch1 -p0
 
 %build
 %ifarch %{ix86}
