@@ -1,11 +1,4 @@
-%if %mandriva_branch == Cooker
-# Cooker
 %define release 1
-%else
-# Old distros
-%define subrel 1
-%define release %mkrel 0
-%endif
 
 %define	major 1
 %define	libname	%mklibname vpx %{major}
