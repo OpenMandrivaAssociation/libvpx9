@@ -62,6 +62,10 @@ and decoder.
 %else
 %global vpxtarget generic-gnu
 %endif
+%ifarch %{arm}
+%global vpxtarget armv7-linux-gcc
+sed -i 's/arm-none-linux-gnueabi/armv7l-mandriva-linux-gnueabi/g'  build/make/configure.sh
+%endif
 %endif
 %setup_compile_flags
 
