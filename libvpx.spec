@@ -1,13 +1,11 @@
-%define release 1
-
-%define	major 1
+%define	major	1
 %define	libname	%mklibname vpx %{major}
 %define	devname	%mklibname -d vpx
 
 Name:		libvpx
 Summary:	VP8 Video Codec SDK
 Version:	1.1.0
-Release:	%{release}
+Release:	2
 License:	BSD
 Group:		System/Libraries
 URL:		http://www.webmproject.org/tools/vp8-sdk/
@@ -50,7 +48,6 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
-
 %setup -q -n %{name}-v%{version}
 
 %build
