@@ -1,11 +1,11 @@
-%define	major	1
-%define	libname	%mklibname vpx %{major}
-%define	devname	%mklibname -d vpx
+%define major 1
+%define libname %mklibname vpx %{major}
+%define devname %mklibname -d vpx
 
 Name:		libvpx
 Summary:	VP8 Video Codec SDK
 Version:	1.1.0
-Release:	2
+Release:	3
 License:	BSD
 Group:		System/Libraries
 URL:		http://www.webmproject.org/tools/vp8-sdk/
@@ -13,7 +13,8 @@ Source0:	http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
 %endif
-BuildRequires:	doxygen php-cli
+BuildRequires:	doxygen
+BuildRequires:	php-cli
 
 %description
 libvpx provides the VP8 SDK, which allows you to integrate your applications 
@@ -23,6 +24,7 @@ deployed on millions of computers and devices worldwide.
 %package -n	%{libname}
 Summary:	VP8 Video Codec SDK
 Group:		System/Libraries
+Obsoletes:	%{mklibname vpx 0} < 1.1.0
 
 %description -n %{libname}
 libvpx provides the VP8 SDK, which allows you to integrate your applications 
@@ -39,11 +41,11 @@ Provides:	%{name}-devel = %{EVRD}
 Development libraries and headers for developing software against 
 libvpx.
 
-%package	utils
+%package utils
 Summary:	VP8 utilities and tools
 Group:		Video
 
-%description	utils
+%description utils
 A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
@@ -90,12 +92,12 @@ install -m0755 simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder
 install -m0755 twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder
 
 %files -n %{libname}
-%doc AUTHORS CHANGELOG LICENSE README
 %{_libdir}/libvpx.so.%{major}*
 
 %files -n %{devname}
 # These are SDK docs, not really useful to an end-user.
 %doc docs/html
+%doc AUTHORS CHANGELOG LICENSE README
 %{_includedir}/vpx/
 %{_libdir}/pkgconfig/vpx.pc
 %{_libdir}/libvpx.so
