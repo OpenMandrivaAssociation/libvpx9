@@ -2,13 +2,13 @@
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 
-Name:		libvpx
 Summary:	VP8 Video Codec SDK
+Name:		libvpx
 Version:	1.1.0
 Release:	3
 License:	BSD
 Group:		System/Libraries
-URL:		http://www.webmproject.org/tools/vp8-sdk/
+Url:		http://www.webmproject.org/tools/vp8-sdk/
 Source0:	http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
@@ -24,7 +24,6 @@ deployed on millions of computers and devices worldwide.
 %package -n	%{libname}
 Summary:	VP8 Video Codec SDK
 Group:		System/Libraries
-Obsoletes:	%{mklibname vpx 0} < 1.1.0
 
 %description -n %{libname}
 libvpx provides the VP8 SDK, which allows you to integrate your applications 
@@ -50,7 +49,7 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
-%setup -q -n %{name}-v%{version}
+%setup -qn %{name}-v%{version}
 
 %build
 %ifarch %{ix86}
@@ -104,3 +103,4 @@ install -m0755 twopass_encoder %{buildroot}%{_bindir}/vp8_twopass_encoder
 
 %files utils
 %{_bindir}/*
+
