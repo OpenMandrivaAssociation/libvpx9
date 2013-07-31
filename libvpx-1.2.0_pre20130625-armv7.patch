@@ -1,31 +1,15 @@
-diff --git a/build/make/configure.sh b/build/make/configure.sh
-index c99a01c..6230f53 100755
---- a/build/make/configure.sh
-+++ b/build/make/configure.sh
-@@ -596,8 +596,13 @@ process_common_toolchain() {
-             armv6*)
-                 tgt_isa=armv6
-                 ;;
--            armv7*)
-+            armv7hl-*)
-                 tgt_isa=armv7
-+                float_abi=hard
-+                ;;
-+            armv7l*)
-+                tgt_isa=armv7
-+                float_abi=softfp
-                 ;;
-             armv5te*)
-                 tgt_isa=armv5te
-@@ -783,8 +788,9 @@ process_common_toolchain() {
+Index: build/make/configure.sh
+===================================================================
+--- build/make/configure.sh.orig
++++ build/make/configure.sh
+@@ -789,8 +789,8 @@ process_common_toolchain() {
              check_add_asflags --defsym ARCHITECTURE=${arch_int}
              tune_cflags="-mtune="
              if [ ${tgt_isa} == "armv7" ]; then
 -                check_add_cflags  -march=armv7-a -mfloat-abi=softfp
 -                check_add_asflags -march=armv7-a -mfloat-abi=softfp
-+                [ -z "${float_abi}" ] && float_abi=softfp
-+                check_add_cflags  -march=armv7-a -mfloat-abi=${float_abi}
-+                check_add_asflags -march=armv7-a -mfloat-abi=${float_abi}
++                check_add_cflags  -march=armv7-a -mfloat-abi=hard
++                check_add_asflags -march=armv7-a -mfloat-abi=hard
  
                  if enabled neon
                  then

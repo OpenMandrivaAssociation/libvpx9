@@ -61,7 +61,9 @@ and decoder.
 %else
 %setup -qn %{name}-v%{version}
 %endif
-%apply_patches
+%ifarch armv7hl
+%patch0 -p0
+%endif
 
 %build
 %setup_compile_flags
@@ -75,13 +77,14 @@ and decoder.
 %endif
 %ifarch %{arm}
 %global vpxtarget armv7-linux-gcc
-#sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
+sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
 %endif
 %endif
 
 ./configure \
     --enable-shared \
     --enable-vp8 \
+    --target=%{vpxtarget} \
     --disable-static \
     --enable-pic \
     --disable-install-srcs
