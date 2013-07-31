@@ -1,15 +1,22 @@
+%define git 20130625
 %define major 1
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 
 Summary:	VP8 Video Codec SDK
 Name:		libvpx
-Version:	1.1.0
-Release:	3
+Version:	1.2.0
+Release:	%mkrel 0.%{git}
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
+%if %git
+Source0:	http://webm.googlecode.com/files/libvpx-%{version}_pre%{git}.tar.bz2
+%else
 Source0:	http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
+%endif
+Patch0:		libvpx-1.2.0_pre20130625-armv7.patch
+
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
 %endif
@@ -49,28 +56,20 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
+%if %git
+%setup -q -n %{name}-%{version}_pre%{git}
+%else
 %setup -qn %{name}-v%{version}
+%endif
+%apply_patches
 
 %build
-%ifarch %{ix86}
-%global vpxtarget x86-linux-gcc
-%else
-%ifarch	x86_64
-%global	vpxtarget x86_64-linux-gcc
-%else
-%global vpxtarget generic-gnu
-%endif
-%ifarch %{arm}
-%global vpxtarget armv7-linux-gcc
-sed -i 's/arm-none-linux-gnueabi/armv7l-mandriva-linux-gnueabi/g'  build/make/configure.sh
-%endif
-%endif
 %setup_compile_flags
 
 ./configure \
     --enable-shared \
+    --enable-vp8 \
     --disable-static \
-    --target=%{vpxtarget} \
     --enable-pic \
     --disable-install-srcs
 
