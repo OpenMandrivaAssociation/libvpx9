@@ -65,6 +65,19 @@ and decoder.
 
 %build
 %setup_compile_flags
+%ifarch %{ix86}
+%global vpxtarget x86-linux-gcc
+%else
+%ifarch        x86_64
+%global        vpxtarget x86_64-linux-gcc
+%else
+%global vpxtarget generic-gnu
+%endif
+%ifarch %{arm}
+%global vpxtarget armv7-linux-gcc
+#sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
+%endif
+%endif
 
 ./configure \
     --enable-shared \
