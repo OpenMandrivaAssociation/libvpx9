@@ -15,7 +15,6 @@ Source0:	http://webm.googlecode.com/files/libvpx-%{version}_pre%{git}.tar.bz2
 %else
 Source0:	http://webm.googlecode.com/files/%{name}-v%{version}.tar.bz2
 %endif
-Patch0:		libvpx-1.2.0_pre20130625-armv7.patch
 
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
@@ -61,9 +60,9 @@ and decoder.
 %else
 %setup -qn %{name}-v%{version}
 %endif
-%ifarch armv7hl
-%patch0 -p0
-%endif
+
+sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
+sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
 
 %build
 %setup_compile_flags
@@ -86,6 +85,7 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --enable-vp8 \
     --target=%{vpxtarget} \
     --disable-static \
+    --extra-cflags="%{optflags}" \
     --enable-pic \
     --disable-install-srcs
 
