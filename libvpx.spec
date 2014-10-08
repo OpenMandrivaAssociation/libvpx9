@@ -65,6 +65,9 @@ sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
 
 %build
+export CC=gcc
+export CXX=g++
+
 %setup_compile_flags
 %ifarch %{ix86}
 %global vpxtarget x86-linux-gcc
