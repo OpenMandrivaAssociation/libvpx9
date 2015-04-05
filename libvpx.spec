@@ -93,7 +93,8 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --disable-static \
     --extra-cflags="%{optflags}" \
     --enable-pic \
-    --disable-install-srcs
+    --disable-install-srcs \
+    --disable-neon
 
 # stupid config
 perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
