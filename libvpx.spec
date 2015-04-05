@@ -67,8 +67,10 @@ sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
 
 %build
-#export CC=gcc
-#export CXX=g++
+%ifarch %arm
+export CC=gcc
+export CXX=g++
+%endif
 
 %setup_compile_flags
 %ifarch %{ix86}
@@ -93,8 +95,7 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --disable-static \
     --extra-cflags="%{optflags}" \
     --enable-pic \
-    --disable-install-srcs \
-    --disable-neon
+    --disable-install-srcs
 
 # stupid config
 perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
