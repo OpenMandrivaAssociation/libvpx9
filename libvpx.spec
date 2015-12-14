@@ -3,11 +3,12 @@
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
+%define _disable_lto 1
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
 Version:	1.4.0
-Release:	3
+Release:	4
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
@@ -67,7 +68,8 @@ sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
 
 %build
-
+export CC=gcc
+export CXX=g++
 %setup_compile_flags
 %ifarch %{ix86}
 %global vpxtarget x86-linux-gcc
