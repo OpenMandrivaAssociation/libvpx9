@@ -1,5 +1,5 @@
 %define git 0
-%define major 2
+%define major 3
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
@@ -7,16 +7,16 @@
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
-Version:	1.4.0
-Release:	4
+Version:	1.5.0
+Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
-%if %git
-Source0:	http://webm.googlecode.com/files/libvpx-%{version}_pre%{git}.tar.bz2
-%else
-Source0:	http://webm.googlecode.com/files/%{name}-%{version}.tar.gz
-%endif
+# libvpx doesn't do official releases -- need to identify the git commit number of the release and
+# insert that.
+# https://chromium.googlesource.com/webm/libvpx
+# https://chromium.googlesource.com/webm/libvpx/+/v%{version}
+Source0:	https://chromium.googlesource.com/webm/libvpx/+archive/cbecf57f3e0d85a7b7f97f3ab7c507f6fe640a93.tar.gz
 
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
@@ -58,11 +58,7 @@ A selection of utilities and tools for VP8/VP9, including a sample encoder
 and decoder.
 
 %prep
-%if %git
-%setup -q -n %{name}-%{version}_pre%{git}
-%else
-%setup -q
-%endif
+%setup -qc %{name}-%{version}
 
 sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
