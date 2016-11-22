@@ -1,5 +1,5 @@
 %define git 0
-%define major 3
+%define major 4
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
@@ -7,16 +7,16 @@
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
-Version:	1.5.0
+Version:	1.6.0
 Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
-# libvpx doesn't do official releases -- need to identify the git commit number of the release and
+# libvpx doesn't do official release tarballs -- need to identify the git commit number of the release and
 # insert that.
 # https://chromium.googlesource.com/webm/libvpx
 # https://chromium.googlesource.com/webm/libvpx/+/v%{version}
-Source0:	https://chromium.googlesource.com/webm/libvpx/+archive/cbecf57f3e0d85a7b7f97f3ab7c507f6fe640a93.tar.gz
+Source0:	https://chromium.googlesource.com/webm/libvpx/+archive/042572177b5c58404836fce3fc221fd077dcd896.tar.gz
 
 %ifarch %{ix86} x86_64
 BuildRequires:	yasm
