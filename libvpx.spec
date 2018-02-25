@@ -1,5 +1,5 @@
 %define git 0
-%define major 4
+%define major 5
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
@@ -7,7 +7,7 @@
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
-Version:	1.6.1
+Version:	1.7.0
 Release:	1
 License:	BSD
 Group:		System/Libraries
