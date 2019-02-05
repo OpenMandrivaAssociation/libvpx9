@@ -84,7 +84,6 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --enable-runtime-cpu-detect \
     --target=%{vpxtarget} \
     --enable-experimental \
-    --enable-spatial-svc \
     --enable-vp9-highbitdepth \
     --disable-static \
     --extra-cflags="%{optflags}" \
