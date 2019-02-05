@@ -12,7 +12,7 @@ Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
-Source0:	https://github.com/webmproject/libvpx/archive/v%{version}.tar.gz
+Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	glibc-devel
 
 %ifarch %{ix86} x86_64
