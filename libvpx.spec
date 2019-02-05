@@ -1,5 +1,5 @@
 %define git 0
-%define major 5
+%define major 6
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
