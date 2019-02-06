@@ -1,5 +1,5 @@
 %define git 0
-%define major 5
+%define major 6
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
@@ -7,12 +7,12 @@
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
-Version:	1.7.0
-Release:	3
+Version:	1.8.0
+Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
-Source0:	https://github.com/webmproject/libvpx/archive/v%{version}.tar.gz
+Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	glibc-devel
 
 %ifarch %{ix86} x86_64
@@ -84,7 +84,6 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --enable-runtime-cpu-detect \
     --target=%{vpxtarget} \
     --enable-experimental \
-    --enable-spatial-svc \
     --enable-vp9-highbitdepth \
     --disable-static \
     --extra-cflags="%{optflags}" \
