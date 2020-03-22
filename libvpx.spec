@@ -3,12 +3,12 @@
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 %define _fortify_cflags %{nil}
-%define _disable_lto 1
+%global optflags %{optflags} -pthread
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
 Version:	1.8.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
