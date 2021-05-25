@@ -2,20 +2,20 @@
 %define major 6
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
-%define _fortify_cflags %{nil}
-%global optflags %{optflags} -pthread
+
+%global optflags %{optflags} -O3 -pthread
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
 Version:	1.10.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
 Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildRequires:	glibc-devel
 
-%ifarch %{ix86} x86_64
+%ifarch %{ix86} %{x86_64}
 BuildRequires:	yasm
 %endif
 
@@ -53,7 +53,7 @@ A selection of utilities and tools for VP8/VP9, including a sample encoder
 and decoder.
 
 %prep
-%setup -q
+%autosetup -p1
 
 sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
@@ -61,12 +61,13 @@ sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
 %build
 export CC=clang
 export CXX=clang++
-%setup_compile_flags
+%set_build_flags
+
 %ifarch %{ix86}
 %global vpxtarget x86-linux-gcc
 %else
-%ifarch        x86_64
-%global        vpxtarget x86_64-linux-gcc
+%ifarch %{x86_64}
+%global vpxtarget x86_64-linux-gcc
 %else
 %global vpxtarget generic-gnu
 %endif
@@ -86,11 +87,10 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --enable-experimental \
     --enable-vp9-highbitdepth \
     --disable-static \
-    --extra-cflags="%{optflags}" \
+    --extra-cflags="-U_FORTIFY_SOURCE %{optflags} -O3" \
+	--extra-cxxflags="-U_FORTIFY_SOURCE %{optflags} -O3" \
     --enable-pic \
-    --disable-install-srcs \
-    --disable-neon \
-    --disable-neon-asm
+    --disable-install-srcs
 
 # stupid config
 perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
