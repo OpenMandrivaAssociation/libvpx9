@@ -96,10 +96,10 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
 perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
 perl -pi -e "s|^LIBSUBDIR=lib|LIBSUBDIR=%{_lib}|g" config.mk
 
-%make
+%make_build
 
 %install
-make DIST_DIR=%{buildroot}%{_prefix} install
+%make_install DIST_DIR=%{buildroot}%{_prefix}
 
 install -m0755 examples/simple_decoder %{buildroot}%{_bindir}/vp8_simple_decoder
 install -m0755 examples/simple_encoder %{buildroot}%{_bindir}/vp8_simple_encoder
