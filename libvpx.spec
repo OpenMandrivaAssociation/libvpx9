@@ -1,5 +1,5 @@
 %define git 0
-%define major 6
+%define major 7
 %define libname %mklibname vpx %{major}
 %define devname %mklibname -d vpx
 
@@ -7,14 +7,12 @@
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
-Version:	1.10.0
-Release:	2
+Version:	1.11.0
+Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
 Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
-BuildRequires:	glibc-devel
-
 %ifarch %{ix86} %{x86_64}
 BuildRequires:	yasm
 %endif
@@ -25,7 +23,7 @@ applications with the VP8/VP9 video codec, a high quality, royalty
 free, open source codec deployed on millions of computers and devices
 worldwide.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	VP8 Video Codec SDK
 Group:		System/Libraries
 
@@ -34,13 +32,13 @@ libvpx provides the VP8/9 SDK, which allows you to integrate your applications
 with the VP8/9 video codec, a high quality, royalty free, open source codec
 deployed on millions of computers and devices worldwide.
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Development files for libvpx
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
-%description -n	%{devname}
+%description -n %{devname}
 Development libraries and headers for developing software against
 libvpx.
 
@@ -69,11 +67,16 @@ export CXX=clang++
 %ifarch %{x86_64}
 %global vpxtarget x86_64-linux-gcc
 %else
-%global vpxtarget generic-gnu
-%endif
+%ifarch %{aarch64}
+%global vpxtarget arm64-linux-gcc
+%else
 %ifarch %{arm}
 %global vpxtarget armv7-linux-gcc
 sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
+%else
+%global vpxtarget generic-gnu
+%endif
+%endif
 %endif
 %endif
 
@@ -81,20 +84,25 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --enable-shared \
     --enable-vp8 \
     --enable-vp9 \
-    --enable-postproc \
-    --enable-runtime-cpu-detect \
-    --target=%{vpxtarget} \
-    --enable-experimental \
     --enable-vp9-highbitdepth \
+    --enable-postproc \
+%ifarch %{arm}
+    --enable-runtime-cpu-detect \
+%else
+    --disable-runtime-cpu-detect \
+%endif
+    --target="%{vpxtarget}" \
+    --enable-multithread \
+    --enable-experimental \
     --disable-static \
     --extra-cflags="-U_FORTIFY_SOURCE %{optflags} -O3" \
-	--extra-cxxflags="-U_FORTIFY_SOURCE %{optflags} -O3" \
+    --extra-cxxflags="-U_FORTIFY_SOURCE %{optflags} -O3" \
     --enable-pic \
     --disable-install-srcs
 
 # stupid config
-perl -pi -e "s|/usr/local|%{_prefix}|g" config.mk
-perl -pi -e "s|^LIBSUBDIR=lib|LIBSUBDIR=%{_lib}|g" config.mk
+sed -i -e "s|/usr/local|%{_prefix}|g" config.mk
+sed -i -e "s|^LIBSUBDIR=lib|LIBSUBDIR=%{_lib}|g" config.mk
 
 %make_build
 
