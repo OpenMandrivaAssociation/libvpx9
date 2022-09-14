@@ -8,7 +8,7 @@
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
 Version:	1.12.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
@@ -86,11 +86,7 @@ sed -i 's/arm-none-linux-gnueabi/%{_host}/g'  build/make/configure.sh
     --enable-vp9 \
     --enable-vp9-highbitdepth \
     --enable-postproc \
-%ifarch %{arm}
     --enable-runtime-cpu-detect \
-%else
-    --disable-runtime-cpu-detect \
-%endif
     --target="%{vpxtarget}" \
     --enable-multithread \
     --enable-experimental \
