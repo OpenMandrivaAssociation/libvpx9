@@ -1,20 +1,20 @@
 %define git 0
-%define major 7
-%define libname %mklibname vpx %{major}
+%define major 8
+%define libname %mklibname vpx
 %define devname %mklibname -d vpx
 
 %global optflags %{optflags} -O3 -pthread
 
 Summary:	VP8/9 Video Codec SDK
 Name:		libvpx
-Version:	1.12.0
-Release:	3
+Version:	1.13.0
+Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
 Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
 %ifarch %{ix86} %{x86_64}
-BuildRequires:	yasm
+BuildRequires:	nasm
 %endif
 
 %description
@@ -57,8 +57,6 @@ sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
 
 %build
-export CC=clang
-export CXX=clang++
 %set_build_flags
 
 %ifarch %{ix86}
