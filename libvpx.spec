@@ -14,6 +14,9 @@ Group:		System/Libraries
 Url:		http://www.webmproject.org/tools/vp8-sdk/
 Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
 %ifarch %{ix86} %{x86_64}
+# (Configure script uses `which` to locate yasm and nasm, so
+# while it looks odd, it's indeed an x86-only dependency)
+BuildRequires:	which
 BuildRequires:	yasm
 %endif
 
