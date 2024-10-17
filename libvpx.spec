@@ -11,7 +11,7 @@ Version:	1.14.1
 Release:	1
 License:	BSD
 Group:		System/Libraries
-Url:		http://www.webmproject.org/tools/vp8-sdk/
+Url:		https://www.webmproject.org/tools/vp8-sdk/
 Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
 %ifarch %{ix86} %{x86_64}
 # (Configure script uses `which` to locate yasm and nasm, so
