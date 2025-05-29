@@ -1,18 +1,17 @@
 %define git 0
 %define major 9
-%define libname %mklibname vpx
-%define devname %mklibname -d vpx
+%define libname %mklibname vpx %{major}
 
 %global optflags %{optflags} -O3 -pthread
 
-Summary:	VP8/9 Video Codec SDK
-Name:		libvpx
+Summary:	VP8/9 Video Codec SDK (old version)
+Name:		libvpx9
 Version:	1.15.0
 Release:	1
 License:	BSD
 Group:		System/Libraries
 Url:		https://www.webmproject.org/tools/vp8-sdk/
-Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/webmproject/libvpx/archive/v%{version}/libvpx-%{version}.tar.gz
 %ifarch %{ix86} %{x86_64}
 # (Configure script uses `which` to locate yasm and nasm, so
 # while it looks odd, it's indeed an x86-only dependency)
@@ -24,7 +23,7 @@ BuildRequires:	yasm
 libvpx provides the VP8 and VP9 SDK, which allows you to integrate your
 applications with the VP8/VP9 video codec, a high quality, royalty
 free, open source codec deployed on millions of computers and devices
-worldwide.
+worldwide. (old version)
 
 %package -n %{libname}
 Summary:	VP8 Video Codec SDK
@@ -35,26 +34,8 @@ libvpx provides the VP8/9 SDK, which allows you to integrate your applications
 with the VP8/9 video codec, a high quality, royalty free, open source codec
 deployed on millions of computers and devices worldwide.
 
-%package -n %{devname}
-Summary:	Development files for libvpx
-Group:		Development/C
-Requires:	%{libname} = %{EVRD}
-Provides:	%{name}-devel = %{EVRD}
-
-%description -n %{devname}
-Development libraries and headers for developing software against
-libvpx.
-
-%package utils
-Summary:	VP8/VP9 utilities and tools
-Group:		Video
-
-%description utils
-A selection of utilities and tools for VP8/VP9, including a sample encoder
-and decoder.
-
 %prep
-%autosetup -p1
+%autosetup -p1 -n libvpx-%{version}
 
 sed -i 's/armv7\*-hardfloat*/armv7hl-/g' build/make/configure.sh
 sed -i 's/armv7\*/armv7l-*/g' build/make/configure.sh
@@ -113,14 +94,8 @@ install -m0755 examples/vpx_temporal_svc_encoder %{buildroot}%{_bindir}/vpx_temp
 install -m0755 examples/vp9_lossless_encoder %{buildroot}%{_bindir}/vp9_lossless_encoder
 rm -rf %{buildroot}/%{_defaultdocdir}/html
 
+# No devel files for compat packages
+rm -rf %{buildroot}%{_includedir} %{buildroot}%{_libdir}/pkgconfig %{buildroot}%{_libdir}/*.so %{buildroot}%{_bindir}
+
 %files -n %{libname}
 %{_libdir}/libvpx.so.%{major}*
-
-%files -n %{devname}
-%doc AUTHORS CHANGELOG LICENSE README
-%{_includedir}/vpx/
-%{_libdir}/pkgconfig/vpx.pc
-%{_libdir}/libvpx.so
-
-%files utils
-%{_bindir}/*
